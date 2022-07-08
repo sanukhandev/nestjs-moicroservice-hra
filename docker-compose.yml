@@ -1,0 +1,74 @@
+version: '3'
+services:
+
+  mysql:
+    image: mysql:8
+    hostname: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=password
+      - MYSQL_USER=user
+    networks:
+      - service-network
+
+  gateway:
+    depends_on:
+      - dbservice
+      - authservice
+    networks:
+      - service-network
+    build: 
+      context: ./hr-gate-way
+      dockerfile: Dockerfile
+    restart: always
+    hostname: gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./hr-gate-way:/usr/src/app
+    command:
+      - yarn
+      - start:dev
+  authservice:
+    build: 
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+    networks:
+      - service-network
+    restart: always
+    hostname: auth-service
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./services/auth-service:/usr/src/app
+    command:
+      - yarn
+      - start:dev
+  dbservice:
+    depends_on:
+      - mysql
+    build: 
+      context: ./services/db-service
+      dockerfile: Dockerfile
+    networks:
+      - service-network
+    restart: always
+    hostname: db-service
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./services/db-service:/usr/src/app
+    command:
+      - yarn
+      - start:dev
+networks:
+  service-network:
+    driver: bridge
+    
+    
+
+      
