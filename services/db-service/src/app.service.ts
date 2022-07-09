@@ -4,7 +4,6 @@ import { DataSource, DataSourceOptions, getManager, Repository } from 'typeorm';
 import { CreateTenantDto } from './DTO/createTenant.dto';
 import { Tenant } from './entities/tenant.entity';
 import { v4 as uuid } from 'uuid';
-import { ConfigService } from '@nestjs/config';
 import { DataSourceProvider } from './dataSource.provider';
 
 @Injectable()
