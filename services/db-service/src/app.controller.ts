@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 @Controller()
 export class AppController {
   private readonly logger = new Logger('db-service controller');
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService) { }
 
   @Get()
   getHello(): string {
@@ -17,9 +17,5 @@ export class AppController {
     this.logger.log(data);
     return await this.appService.createTenant(data);
   }
-
-  @MessagePattern('getTenantConnection')
-  async getTenant(data: any) {
-   
-  }
 }
+

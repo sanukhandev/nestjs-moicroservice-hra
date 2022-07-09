@@ -1,23 +1,25 @@
 import { Module } from '@nestjs/common';
-import { SequelizeModule } from '@nestjs/sequelize';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Tenant } from './models/tenant.model';
-import { TenantProvider } from './providers/tenant-provider';
+import { Tenant } from './entities/tenant.entity';
 
 @Module({
-  imports: [SequelizeModule.forRoot({
-    dialect: 'mysql',
+  imports: [TypeOrmModule.forRoot({
+    type: 'mysql',
     host: 'mysql',
     port: 3306,
     username: 'root',
-    password: 'root',
+    password: 'password',
     database: 'prime_db',
-    models: [Tenant],
-    autoLoadModels: true,
+    entities: [__dirname + '/**/*.entity{.ts,.js}'],
     synchronize: true,
-  })], 
+  }),
+  TypeOrmModule.forFeature([
+    Tenant,
+  ],
+  )],
   controllers: [AppController],
-  providers: [AppService, ...TenantProvider],
+  providers: [AppService,],
 })
-export class AppModule {}
+export class AppModule { }
