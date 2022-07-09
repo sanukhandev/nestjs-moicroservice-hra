@@ -1,18 +1,18 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./user.entity";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Tenant } from "./tenant.entity";
 
 @Entity()
-export class Tenant {
+export class User {
     @PrimaryGeneratedColumn()
     id: number;
     @Column()
     name: string;
     @Column()
-    host: string;
+    email: string;
     @Column()
-    database: string;
-    @ManyToOne(type => User, user => user.tenant)
-    user: User;
+    password: string;
+    @OneToOne(type => Tenant, tenant => tenant.user)
+    tenant: Tenant;
     @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
     createdTime: Date;
     @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
@@ -20,4 +20,3 @@ export class Tenant {
     @Column('integer', { default: 1 })
     status: number;
 }
-    
