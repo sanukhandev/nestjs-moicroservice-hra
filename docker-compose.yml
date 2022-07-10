@@ -33,21 +33,6 @@ services:
     command:
       - yarn
       - start:dev
-  authservice:
-    build: 
-      context: ./services/auth-service
-      dockerfile: Dockerfile
-    networks:
-      - service-network
-    restart: always
-    hostname: auth-service
-    ports:
-      - "3001:3001"
-    volumes:
-      - ./services/auth-service:/usr/src/app
-    command:
-      - yarn
-      - start:dev
   dbservice:
     depends_on:
       - mysql
@@ -58,8 +43,6 @@ services:
       - service-network
     restart: always
     hostname: db-service
-    ports:
-      - "3002:3002"
     volumes:
       - ./services/db-service:/usr/src/app
     command:
