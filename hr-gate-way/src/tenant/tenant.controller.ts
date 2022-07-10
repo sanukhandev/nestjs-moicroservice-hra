@@ -1,7 +1,9 @@
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Logger, Post, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateTenantDto } from 'src/DTO/createTenant.dto';
 import { TenantService } from './tenant.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('tenant')
 export class TenantController {
     private readonly logger = new Logger('TenantController');

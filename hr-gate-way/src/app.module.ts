@@ -2,15 +2,15 @@ import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthService, DBservice } from "./service.registery";
+import { DBservice } from "./service.registery";
 import { TenantController } from './tenant/tenant.controller';
 import { TenantService } from './tenant/tenant.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [ClientsModule.register([
-    AuthService,
     DBservice
-  ]),],
+  ]), AuthModule,],
   controllers: [AppController, TenantController],
   providers: [AppService, TenantService],
 })
