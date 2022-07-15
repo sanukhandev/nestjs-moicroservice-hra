@@ -15,6 +15,18 @@ services:
     networks:
       - service-network
 
+  mongodb:
+    image: mongo:5.0
+    hostname: mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - ~/apps/mongo:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+
+
   gateway:
     depends_on:
       - dbservice

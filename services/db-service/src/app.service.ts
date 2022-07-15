@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, DataSourceOptions, getManager, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateTenantDto } from './DTO/createTenant.dto';
 import { Tenant } from './entities/tenant.entity';
 import { v4 as uuid } from 'uuid';
-import { DataSourceProvider } from './dataSource.provider';
+import { SQLDataSourceProvider } from './providers/SQLdataSource.provider';
 
 @Injectable()
 export class AppService {
@@ -20,7 +20,7 @@ export class AppService {
     this.logger.log(body);
     const dbName = body.name + (uuid()).split('-')[0];
     const res = await this.tenantRepo.save({ ...body, createdAt: new Date(), updatedAt: new Date(), status: 1, database: dbName });
-    const dataSource: DataSource = await (new DataSourceProvider()).getDataSource();
+    const dataSource: DataSource = await (new SQLDataSourceProvider()).getDataSource();
     await dataSource.query(`CREATE DATABASE ${res.database}`);
     await dataSource.destroy();
     await this.migrateTable(res.database);
@@ -28,7 +28,7 @@ export class AppService {
   }
 
   async migrateTable(database: string) {
-    const dataSource: DataSource = await (new DataSourceProvider(database)).getDataSource();
+    const dataSource: DataSource = await (new SQLDataSourceProvider(database)).getDataSource();
     await dataSource.synchronize();
     await dataSource.destroy();
   }
